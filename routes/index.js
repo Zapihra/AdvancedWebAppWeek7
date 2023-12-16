@@ -1,8 +1,11 @@
 var express = require('express');
 var router = express.Router();
+
 var bcrypt = require('bcryptjs')
 const numberGenerator = require("number-generator");
-const generator = numberGenerator.aleaRNGFactory(2)
+const generator = numberGenerator.aleaRNGFactory(2);
+
+
 
 var list = [];
 
@@ -45,10 +48,31 @@ router.post('/api/user/register', function(req, res) {
 })
 
 router.get('/api/user/list', function(req, res) {
-  res.send(JSON.stringify(list))
+  res.send(list)
 })
 
+router.post('/api/user/login', function(req,res) {
+  const user = req.body.username
+  const passw = req.body.password
 
+  console.log(req)
+
+  for (let i = 0; i < list.length; i++) {
+    const element = list[i];
+    //console.log(element.username, req.body.username)
+    found = (element.username == user)
+    if (found == true) {
+      const check = bcrypt.compareSync(passw, element.password)
+      if (check == true) {
+        res.status(200).send()
+      }
+      else{
+        res.status(400).send()
+      }
+      
+    }
+  }
+})
 
 
 module.exports = router;
