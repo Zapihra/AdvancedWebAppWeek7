@@ -41,7 +41,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/api/user/register', function(req, res) {
-  //console.log(req.body)
+  
+  if (req.isAuthenticated()) {
+    res.redirect('/')
+  }
+  
   var found = false;
   
   for (let i = 0; i < users.length; i++) {
@@ -76,10 +80,20 @@ router.get('/api/user/list', function(req, res) {
   res.send(users)
 })
 
-router.post('/api/user/login', 
+router.post('/api/user/login', function(req, res, next) {
+    if (req.isAuthenticated()) {
+      res.redirect('/')
+      }
+    else{
+      next()
+    }
+  },
   passport.authenticate('local'), (req,res) => {
     res.status(200).send("success");
-  });
+    }
+  );
+
+
 //   ({const user = req.body.username
 //   const passw = req.body.password
 
@@ -116,5 +130,14 @@ router.get('/api/secret',
     }
   })
 
+router.get('/api/secret', 
+  function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+    res.status('200').send("access")
+    }
+    else{
+      res.status('401').send('no access');
+    }
+  })
 
 module.exports = router;
