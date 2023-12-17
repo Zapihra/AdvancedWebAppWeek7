@@ -45,7 +45,7 @@ router.post('/api/user/register', function(req, res) {
   if (req.isAuthenticated()) {
     res.redirect('/')
   }
-  
+  else {
   var found = false;
   
   for (let i = 0; i < users.length; i++) {
@@ -73,7 +73,7 @@ router.post('/api/user/register', function(req, res) {
       "password": hash
     })
   }
-
+}
 })
 
 router.get('/api/user/list', function(req, res) {
@@ -94,32 +94,6 @@ router.post('/api/user/login', function(req, res, next) {
   );
 
 
-//   ({const user = req.body.username
-//   const passw = req.body.password
-
-//   for (let i = 0; i < list.length; i++) {
-//     const element = list[i];
-//     //console.log(element.username, req.body.username)
-//     found = (element.username == user)
-  
-//     if (found == true) {
-
-//       const check = bcrypt.compare(passw, element.password)
-//       if (check == true) {
-//         sessions.push(req.session.id)
-        
-//         res.status(200)
-//         console.log(res)
-//         res.send("successful")
-//       }
-//       else{
-//         res.status(401).send()
-//       }
-      
-//     }
-//   }
-// })
-
 router.get('/api/secret', 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -130,14 +104,5 @@ router.get('/api/secret',
     }
   })
 
-router.get('/api/secret', 
-  function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-    res.status('200').send("access")
-    }
-    else{
-      res.status('401').send('no access');
-    }
-  })
 
 module.exports = router;
