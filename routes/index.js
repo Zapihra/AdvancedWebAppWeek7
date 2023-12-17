@@ -77,10 +77,9 @@ router.get('/api/user/list', function(req, res) {
 })
 
 router.post('/api/user/login', 
-  passport.authenticate('local',{
-    failureRedirect: '/api/user/login',
-    successRedirect: '/'
-  }));
+  passport.authenticate('local'), (req,res) => {
+    res.status(200).send("success");
+  });
 //   ({const user = req.body.username
 //   const passw = req.body.password
 
