@@ -108,20 +108,19 @@ router.get('/api/secret',
   })
 
 router.post('/api/todos', function (req,res) {
-  console.log(req)
   if (req.isAuthenticated()) {
     var list = userTodo.find(u => u.id === req.user.id);
     if (list == undefined) {
       userTodo.push({
         "id": req.user.id,
         "todos": [
-          req.body.todos
+          req.body.todo
         ]
       })
       list = userTodo.find(u => u.id === req.user.id);
     }
     else {
-      list.todos.push(req.body.todos)
+      list.todos.push(req.body.todo)
     }
     
     res.send(JSON.stringify(list))
@@ -132,7 +131,7 @@ router.post('/api/todos', function (req,res) {
 })
 
 router.get('/api/todos/list', function(req, res) {
-  res.send(JSON.stringify(userTodo))
+  res.send(userTodo)
 })
 
 module.exports = router;
