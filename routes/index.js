@@ -9,8 +9,10 @@ const generator = numberGenerator.aleaRNGFactory(2);
 var passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-//var list = [];
+var numbers = [514426, 885999, 404];
 var users = [];
+var userTodo = [];
+var i = 0;
 
 passport.use(new LocalStrategy(
   (username, password, done) => {
@@ -59,16 +61,17 @@ router.post('/api/user/register', function(req, res) {
   }
 
   if (found == false) {
-    var number = generator.uInt32();
+    //var number = generator.uInt32();
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync( req.body.password, salt)
 
-    users.push({"id": 1,
+    users.push({"id": numbers[i],
       "username": req.body.username, 
       "password": hash
     })
+    i = i + 1;
     res.json({
-      "id": number,
+      "id": numbers[i-1],
       "username": req.body.username,
       "password": hash
     })
@@ -104,5 +107,31 @@ router.get('/api/secret',
     }
   })
 
+router.post('/api/todos', function (req,res) {
+  if (req.isAuthenticated()) {
+    var list = userTodo.find(u => u.id === req.user.id);
+    if (list == undefined) {
+      userTodo.push({
+        "id": req.user.id,
+        "todos": [
+          req.body.todo
+        ]
+      })
+      list = userTodo.find(u => u.id === req.user.id);
+    }
+    else {
+      list.todos.push(req.body.todo)
+    }
+    
+    res.send(JSON.stringify(list))
+  }
+  else {
+    res.send("access denied")
+  }
+})
+
+router.get('/api/todos/list', function(req, res) {
+  res.send(JSON.stringify(userTodo))
+})
 
 module.exports = router;
