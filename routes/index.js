@@ -108,6 +108,7 @@ router.get('/api/secret',
   })
 
 router.post('/api/todos', function (req,res) {
+  console.log(req.body)
   if (req.isAuthenticated()) {
     var list = userTodo.find(u => u.id === req.user.id);
     if (list == undefined) {
