@@ -114,13 +114,13 @@ router.post('/api/todos', function (req,res) {
       userTodo.push({
         "id": req.user.id,
         "todos": [
-          req.body.todo
+          req.body.todos
         ]
       })
       list = userTodo.find(u => u.id === req.user.id);
     }
     else {
-      list.todos.push(req.body.todo)
+      list.todos.push(req.body.todos)
     }
     
     res.send(JSON.stringify(list))
