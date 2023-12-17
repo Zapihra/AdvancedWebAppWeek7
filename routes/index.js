@@ -126,7 +126,7 @@ router.post('/api/todos', function (req,res) {
     res.send(JSON.stringify(list))
   }
   else {
-    res.send("access denied")
+    res.status(401).send("access denied")
   }
 })
 
