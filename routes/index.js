@@ -1,9 +1,20 @@
 var express = require('express');
 var router = express.Router();
+var session = require('express-session')
 
 var bcrypt = require('bcryptjs')
 const numberGenerator = require("number-generator");
 const generator = numberGenerator.aleaRNGFactory(2);
+
+var passport = require('passport');
+
+router.use(session({
+  name: "connect.sid",
+  secret: "myDog",
+  resave: true,
+  saveUninitialized: true,
+  //cookie: {secure: true}
+}));
 
 
 
@@ -55,19 +66,22 @@ router.post('/api/user/login', function(req,res) {
   const user = req.body.username
   const passw = req.body.password
 
-  console.log(req)
+  
 
   for (let i = 0; i < list.length; i++) {
     const element = list[i];
     //console.log(element.username, req.body.username)
     found = (element.username == user)
+  
     if (found == true) {
+
       const check = bcrypt.compareSync(passw, element.password)
       if (check == true) {
-        res.status(200).send()
+
+        res.status(200).cookie(req.sessionID).send("succesful")
       }
       else{
-        res.status(400).send()
+        res.status(401).send()
       }
       
     }
